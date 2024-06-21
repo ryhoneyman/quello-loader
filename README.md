@@ -1,1 +1,1 @@
-# Quello - Project Quarm Character Viewer
+# Quello Loader - Project Quarm Character Database Loader
