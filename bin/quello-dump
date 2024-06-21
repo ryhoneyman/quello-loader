@@ -1,0 +1,27 @@
+#!/bin/bash
+
+SCRIPTDIR=${BASH_SOURCE%/*}
+
+if [ ! -f "$SCRIPTDIR/../lib/quello-functions" ]; then
+    echo "Cannot load libraries"
+    exit
+else
+    . $SCRIPTDIR/../lib/quello-functions
+fi
+
+read_config $SCRIPTDIR/../etc/quello.conf
+
+### Main ###=====================================================
+
+DUMPFILEPATH="$SCRIPTDIR/../$DUMPDIR/$DUMPFILE"
+
+### Dump cloned tables
+###-------------------
+$MYSQL_BIN $MYSQL_RO_ARGS -N -e 'show tables like "quello\_%"' | xargs $MYSQLDUMP_BIN $MYSQL_RO_ARGS > $DUMPFILEPATH
+exit_if_error $? "While dumping tables to $DUMPFILEPATH"
+
+### Compress dump file
+###-------------------
+$GZIP_BIN $GZIP_ARGS $DUMPFILE
+exit_if_error $? "While compressing dump file $DUMPFILEPATH"
+

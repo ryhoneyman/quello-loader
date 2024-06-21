@@ -1,0 +1,63 @@
+#!/bin/bash
+
+SCRIPTDIR=${BASH_SOURCE%/*}
+
+if [ ! -f "$SCRIPTDIR/../lib/quello-functions" ]; then
+    echo "Cannot load libraries"
+    exit
+else
+    . $SCRIPTDIR/../lib/quello-functions
+fi
+
+read_config $SCRIPTDIR/../etc/quello.conf
+
+### Variables ###=====================================================
+
+CHARACTER_DATA_TABLE='character_data'
+
+### We could generate this list dynamically, but these tables are static
+### mysql $DBNAME <<< "desc character_data" | awk '{print $1}' | grep -vP 'Field|account_id|forum_id' | xargs | sed -e 's/ /,/g' | sed -e 's/,int,/,`int`,/'
+
+CHARACTER_DATA_COLUMNS='id,name,last_name,title,suffix,zone_id,y,x,z,heading,gender,race,class,level,deity,birthday,last_login,time_played,level2,anon,gm,face,hair_color,hair_style,beard,beard_color,eye_color_1,eye_color_2,exp,aa_points_spent,aa_exp,aa_points,points,cur_hp,mana,endurance,intoxication,str,sta,cha,dex,`int`,agi,wis,zone_change_count,hunger_level,thirst_level,pvp_status,air_remaining,autosplit_enabled,mailkey,firstlogon,e_aa_effects,e_percent_to_aa,e_expended_aa_spent,boatid,boatname,famished,is_deleted,showhelm,fatigue,e_self_found,e_solo_only,e_hardcore,e_hardcore_death_time,e_betabuff_gear_flag,e_zone_guild_id,e_temp_last_name,e_married_character_id'
+
+
+CHARACTER_TABLES=(
+   'character_alternate_abilities'
+   'character_bind'
+   'character_currency'
+   'character_faction_values'
+   'character_inventory'
+   'character_keyring'
+   'character_languages'
+   'character_skills'
+   'character_spells'
+   'character_zone_flags'
+)
+
+GUILD_TABLE='guilds'
+GUILD_COLUMNS='id,name,leader'
+
+GUILD_MEMBER_TABLE='guild_members'
+GUILD_MEMBER_COLUMNS='char_id,guild_id,rank'
+
+### Main ###=====================================================
+
+### Clone main character table
+###---------------------------
+RESULT=$(clone_table $CHARACTER_DATA_TABLE $CHARACTER_DATA_COLUMNS "WHERE e_quello_flag > 0")
+exit_if_error $RESULT "Could not clone table $CHARACTER_DATA_TABLE"
+
+### Clone guild tables
+###-------------------
+RESULT=$(clone_table $GUILD_TABLE $GUILD_COLUMNS);
+exit_if_error $RESULT "Could not clone table $GUILD_TABLE"
+
+RESULT=$(clone_table $GUILD_MEMBER_TABLE $GUILD_MEMBER_COLUMNS "WHERE char_id in (SELECT id FROM quello_character_data)");
+exit_if_error $RESULT "Could not clone table $GUILD_TABLE"
+
+### Clone supporting character tables
+###----------------------------------
+for TABLE in "${CHARACTER_TABLES[@]}"; do
+   RESULT=$(clone_table $TABLE '*' "WHERE id in (SELECT id FROM quello_character_data)")
+   exit_if_error $RESULT "Could not clone table $TABLE"
+done
