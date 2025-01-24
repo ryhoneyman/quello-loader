@@ -3,8 +3,8 @@ read_config() {
 
    eval $(egrep "^[^#;]" $CONFIG_FILE | xargs -d'\n' -n1 | sed 's/^/export /')
 
-   export MYSQL_RW_ARGS="$DBNAME $DB_RW_AUTH"
-   export MYSQL_RO_ARGS="$DBNAME $DB_RO_AUTH"
+   export MYSQL_RW_ARGS="$DBNAME -u$DB_RW_USER -p$DB_RW_PASS"
+   export MYSQL_RO_ARGS="$DBNAME -u$DB_RO_USER -p$DB_RO_PASS"
 }
 
 exit_if_error() {

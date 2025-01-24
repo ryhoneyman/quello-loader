@@ -22,6 +22,5 @@ exit_if_error $? "While dumping tables to $DUMPFILEPATH"
 
 ### Compress dump file
 ###-------------------
-$GZIP_BIN $GZIP_ARGS $DUMPFILE
+$GZIP_BIN $GZIP_ARGS $DUMPFILEPATH
 exit_if_error $? "While compressing dump file $DUMPFILEPATH"
-

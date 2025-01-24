@@ -34,6 +34,13 @@ CHARACTER_TABLES=(
    'character_zone_flags'
 )
 
+SUPPORTING_TABLES=(
+    'items'
+    'altadv_vars'
+    'aa_effects'
+    'rule_values'
+)
+
 GUILD_TABLE='guilds'
 GUILD_COLUMNS='id,name,leader'
 
@@ -44,7 +51,7 @@ GUILD_MEMBER_COLUMNS='char_id,guild_id,rank'
 
 ### Clone main character table
 ###---------------------------
-RESULT=$(clone_table $CHARACTER_DATA_TABLE $CHARACTER_DATA_COLUMNS "WHERE e_quello_flag > 0")
+RESULT=$(clone_table $CHARACTER_DATA_TABLE $CHARACTER_DATA_COLUMNS "WHERE e_char_export_flag > 0")
 exit_if_error $RESULT "Could not clone table $CHARACTER_DATA_TABLE"
 
 ### Clone guild tables
@@ -55,9 +62,16 @@ exit_if_error $RESULT "Could not clone table $GUILD_TABLE"
 RESULT=$(clone_table $GUILD_MEMBER_TABLE $GUILD_MEMBER_COLUMNS "WHERE char_id in (SELECT id FROM quello_character_data)");
 exit_if_error $RESULT "Could not clone table $GUILD_TABLE"
 
-### Clone supporting character tables
+### Clone linked character tables
 ###----------------------------------
 for TABLE in "${CHARACTER_TABLES[@]}"; do
    RESULT=$(clone_table $TABLE '*' "WHERE id in (SELECT id FROM quello_character_data)")
+   exit_if_error $RESULT "Could not clone table $TABLE"
+done
+
+### Clone supporting tables
+###----------------------------------
+for TABLE in "${SUPPORTING_TABLES[@]}"; do
+   RESULT=$(clone_table $TABLE '*' "")
    exit_if_error $RESULT "Could not clone table $TABLE"
 done
