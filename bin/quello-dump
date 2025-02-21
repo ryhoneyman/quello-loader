@@ -16,7 +16,7 @@ read_config $SCRIPTDIR/../etc/quello.conf
 DUMPFILEPATH="$SCRIPTDIR/../$DUMPDIR/$DUMPFILE"
 
 ### Dump character_data table
-###------------
+###--------------------------
 $MYSQLDUMP_BIN $MYSQLDUMP_ARGS $MYSQL_ARGS $CHARACTER_DATA_TABLE --where="e_char_export_flag > 0" > $DUMPFILEPATH
 exit_if_error $? "While dumping character data table to $DUMPFILEPATH"
 
