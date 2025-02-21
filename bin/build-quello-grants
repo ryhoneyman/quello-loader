@@ -14,18 +14,21 @@ read_config $SCRIPTDIR/../etc/quello.conf
 GRANT_PRIV='SHOW VIEW, SELECT'
 GRANT_TO="'$DB_QUELLO_USER'@'%'"
 
+echo -e "\n-- Paste these GRANT statements to the MySQL server for the Quello Loader\n"
+
 echo "GRANT $GRANT_PRIV($CHARACTER_DATA_COLUMNS) ON $DBNAME.$CHARACTER_DATA_TABLE TO $GRANT_TO;"
-echo ''
+echo ""
 
 for TABLE in "${CHARACTER_TABLES[@]}"; do
    echo "GRANT $GRANT_PRIV ON $DBNAME.$TABLE TO $GRANT_TO;"
 done
-echo ''
+echo ""
 
 echo "GRANT $GRANT_PRIV($GUILD_COLUMNS) ON $DBNAME.$GUILD_TABLE TO $GRANT_TO;"
 echo "GRANT $GRANT_PRIV($GUILD_MEMBER_COLUMNS) ON $DBNAME.$GUILD_MEMBER_TABLE TO $GRANT_TO;"
-echo ''
+echo ""
 
 for TABLE in "${SUPPORTING_TABLES[@]}"; do
    echo "GRANT $GRANT_PRIV ON $DBNAME.$TABLE TO $GRANT_TO;"
 done
+echo ""
