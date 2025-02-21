@@ -10,9 +10,10 @@ UPLOAD_KEY=''
 
 ### Global system values
 CURL_BIN='curl'
+CURL_ARGS='-s -w %{json}'
 MYSQL_BIN='mysql'
 MYSQLDUMP_BIN='mysqldump'
-MYSQLDUMP_ARGS='--skip-lock-tables'
+MYSQLDUMP_ARGS='--skip-lock-tables --complete-insert'
 GZIP_BIN='gzip'
 GZIP_ARGS='-f'
 
