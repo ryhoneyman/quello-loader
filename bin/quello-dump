@@ -40,6 +40,6 @@ exit_if_error $? "While compressing dump file $DUMPFILEPATH"
 
 ### Upload dump to API 
 ###-------------------
-CURL_OUTPUT=$($CURL_BIN $CURL_ARGS "$UPLOAD_URL" -H "Accept: application/json" -H "Content-Type: multipart/form-data" -H "X-Quarm-Key: $UPLOAD_KEY" -F "file=@$DUMPFILEPATH.gz;type=application/x-gzip")
+CURL_OUTPUT=$($CURL_BIN $CURL_ARGS "$UPLOAD_URL" -H "Accept: application/json" -H "Content-Type: multipart/form-data" -H "X-Quarm_Key: $UPLOAD_KEY" -F "file=@$DUMPFILEPATH.gz;type=application/x-gzip")
 exit_if_error $? "While uploading dump to $UPLOAD_URL"
 echo $CURL_OUTPUT
