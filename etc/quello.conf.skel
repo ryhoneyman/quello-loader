@@ -1,19 +1,49 @@
+### User modifiable values
+DBHOST='localhost'
+DBNAME='quarm'
+DB_QUELLO_USER='quello'
+DB_QUELLO_PASS='quello'
+
+UPLOAD_URL='http://upload.site.local/api/path'
+UPLOAD_KEY=''
+
+
 ### Global system values
 CURL_BIN='curl'
 MYSQL_BIN='mysql'
 MYSQLDUMP_BIN='mysqldump'
+MYSQLDUMP_ARGS='--skip-lock-tables'
 GZIP_BIN='gzip'
 GZIP_ARGS='-f'
 
 DUMPDIR='dumps'
 DUMPFILE='quello.dump.sql'
 
-### User modifiable values
-DBNAME='quarm'
-DB_RO_USER='quarm'
-DB_RO_PASS='quarm'
-DB_RW_USER='quarm'
-DB_RW_PASS='quarm'
+CHARACTER_DATA_TABLE='character_data'
+CHARACTER_DATA_COLUMNS='id,name,last_name,title,suffix,zone_id,y,x,z,heading,gender,race,class,level,deity,birthday,last_login,time_played,level2,anon,gm,face,hair_color,hair_style,beard,beard_color,eye_color_1,eye_color_2,exp,aa_points_spent,aa_exp,aa_points,points,cur_hp,mana,endurance,intoxication,str,sta,cha,dex,`int`,agi,wis,zone_change_count,hunger_level,thirst_level,pvp_status,air_remaining,autosplit_enabled,mailkey,firstlogon,e_aa_effects,e_percent_to_aa,e_expended_aa_spent,boatid,boatname,famished,is_deleted,showhelm,fatigue,e_self_found,e_solo_only,e_hardcore,e_hardcore_death_time,e_betabuff_gear_flag,e_zone_guild_id,e_temp_last_name,e_married_character_id,e_char_export_flag'
 
-UPLOAD_URL='http://upload.site.local/api/path'
-UPLOAD_KEY=''
+GUILD_TABLE='guilds'
+GUILD_COLUMNS='id,name,leader'
+
+GUILD_MEMBER_TABLE='guild_members'
+GUILD_MEMBER_COLUMNS='char_id,guild_id,rank'
+
+CHARACTER_TABLES=(
+   'character_alternate_abilities'
+   'character_bind'
+   'character_currency'
+   'character_faction_values'
+   'character_inventory'
+   'character_keyring'
+   'character_languages'
+   'character_skills'
+   'character_spells'
+   'character_zone_flags'
+)
+
+SUPPORTING_TABLES=(
+    'items'
+    'altadv_vars'
+    'aa_effects'
+    'rule_values'
+)

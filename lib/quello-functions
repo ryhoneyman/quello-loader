@@ -3,8 +3,7 @@ read_config() {
 
    eval $(egrep "^[^#;]" $CONFIG_FILE | xargs -d'\n' -n1 | sed 's/^/export /')
 
-   export MYSQL_RW_ARGS="$DBNAME -u$DB_RW_USER -p$DB_RW_PASS"
-   export MYSQL_RO_ARGS="$DBNAME -u$DB_RO_USER -p$DB_RO_PASS"
+   export MYSQL_ARGS="-h $DBHOST -u$DB_QUELLO_USER -p$DB_QUELLO_PASS $DBNAME"
 }
 
 exit_if_error() {
@@ -15,19 +14,4 @@ exit_if_error() {
       echo "[ERROR] $RESULT $MESSAGE"
       exit $RESULT;
    fi
-}
-
-clone_table() {
-   TABLE=$1
-   COLUMNS=$2
-   WHERE=$3
-
-   SQL_COMMAND="DROP TABLE IF EXISTS quello_$TABLE; CREATE TABLE quello_$TABLE SELECT $COLUMNS FROM $TABLE $WHERE;"
-   #SQL_VIEW_COMMAND="CREATE OR REPLACE VIEW quello_$TABLE AS SELECT $COLUMNS FROM $TABLE $WHERE;"
-
-   $MYSQL_BIN $MYSQL_RW_ARGS <<< $SQL_COMMAND
-
-   echo "- $SQL_COMMAND" >&2
-
-   echo $?
 }

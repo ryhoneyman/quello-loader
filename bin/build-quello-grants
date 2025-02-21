@@ -1,0 +1,31 @@
+#!/bin/bash
+
+SCRIPTDIR=${BASH_SOURCE%/*}
+
+if [ ! -f "$SCRIPTDIR/../lib/quello-functions" ]; then
+    echo "Cannot load libraries"
+    exit
+else
+    . $SCRIPTDIR/../lib/quello-functions
+fi
+
+read_config $SCRIPTDIR/../etc/quello.conf
+
+GRANT_PRIV='SHOW VIEW, SELECT'
+GRANT_TO="'$DB_QUELLO_USER'@'%'"
+
+echo "GRANT $GRANT_PRIV($CHARACTER_DATA_COLUMNS) ON $DBNAME.$CHARACTER_DATA_TABLE TO $GRANT_TO;"
+echo ''
+
+for TABLE in "${CHARACTER_TABLES[@]}"; do
+   echo "GRANT $GRANT_PRIV ON $DBNAME.$TABLE TO $GRANT_TO;"
+done
+echo ''
+
+echo "GRANT $GRANT_PRIV($GUILD_COLUMNS) ON $DBNAME.$GUILD_TABLE TO $GRANT_TO;"
+echo "GRANT $GRANT_PRIV($GUILD_MEMBER_COLUMNS) ON $DBNAME.$GUILD_MEMBER_TABLE TO $GRANT_TO;"
+echo ''
+
+for TABLE in "${SUPPORTING_TABLES[@]}"; do
+   echo "GRANT $GRANT_PRIV ON $DBNAME.$TABLE TO $GRANT_TO;"
+done
